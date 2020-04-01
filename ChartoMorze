@@ -1,0 +1,61 @@
+package Iterfacefile;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.*;
+
+final public class Chartocode implements DoText {///команда 0
+
+    public void control(String file_name1) throws IOException {
+
+        File write_file = new File("result.txt");//создадим файл, куда запишется результат
+        if (write_file.exists()) {//Проверяем есть ли такой файл и, если он есть перезаписываем его
+            //System.out.println("Этот файл существует. Переписать?");
+            // Scanner fast_scan = new Scanner(System.in)
+            write_file.delete();//удаляем старый файл
+        }
+        write_file.createNewFile();//создаем новый
+        PrintWriter writer = new PrintWriter(write_file);//создадим класс, с помощью которого будем записывать в созданный файл
+        Scanner input = new Scanner(new File(file_name1));//сканнер с файла
+        StringBuilder str = new StringBuilder();//Это строка с которой будут поступать и шифроваться символы
+        StringBuilder str_for_write = new StringBuilder(); //В этой строке будет храниться строка которая полностью пойдёт в файл
+        FileInputStream in = new FileInputStream("Char-Morze.txt");//Для пропертис
+        Properties properties = new Properties();
+        properties.load(in);
+
+        HashSet<HashStatistic> HS = new HashSet<HashStatistic>();
+
+        while (input.hasNextLine()) {
+            str_for_write.delete(0, str_for_write.length());//очищаем остатки предыдущей строки
+            str.replace(0, str.length(), input.nextLine());//Заменяем строку для считывания следующей строкой
+            StringBuilder my_key = new StringBuilder("");
+            for (int k = 0; k < str.length(); k++) {
+                my_key.delete(0, my_key.length());
+                my_key.append(str.charAt(k));
+                HS.add(new HashStatistic(str.charAt(k)));
+                if (my_key.toString().equals(" ")) {//костыль с пробелом
+                    str_for_write.append(" ");
+                    my_key.append(str.charAt(k));
+                    //              System.out.print("0");
+                } else if (properties.containsKey(my_key.toString())) {
+                    str_for_write.append(properties.getProperty(my_key.toString()));
+                    //                System.out.print("1");//Меняем ключевой символ на код морзе и добавляем в строку для записи
+                }
+
+            }
+            writer.println(str_for_write);
+            //  System.out.println(str);
+        }
+
+        int index_of_arr = 0;
+        for(HashStatistic tmp:HS){
+            index_of_arr++;
+            System.out.println(index_of_arr + ") " + tmp.getcode1()+"=" + properties.getProperty(""+tmp.getcode1()) +"---- " + tmp.getCounter());
+        }
+
+        in.close();
+        writer.close();
+    }
+}
