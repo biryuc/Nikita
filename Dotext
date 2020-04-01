@@ -1,0 +1,5 @@
+package Iterfacefile;
+import java.io.IOException;
+public interface DoText {
+    void control(String file_name1) throws IOException;
+    }
