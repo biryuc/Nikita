@@ -1,0 +1,62 @@
+package Iterfacefile;
+
+final public class HashStatistic {
+    private int hashcode;
+    private char code1;//Просто символ
+    private String code2; //Код Морзе
+    int counter;
+    public HashStatistic(char code){
+        counter = 1;
+        char n_code = Character.toTitleCase(code);
+        this.code1 = n_code;
+        this.code2 = ""+ n_code;
+        this.hashcode = n_code;
+    }
+    public HashStatistic(String code2){
+        counter = 1;
+        this.code2 = code2;
+        this.hashcode = 0;
+        for(int i=0;i<code2.length();i++){
+            if(code2.charAt(i)=='.'){
+                hashcode+= pow(3,i);
+            } else if(code2.charAt(i)=='-'){
+                hashcode+= 2*pow(3,i);
+            }
+        }
+    }
+    public int hashCode(){
+        return hashcode;
+    }
+    public boolean equals(HashStatistic obj){
+        if(this.hashCode()==obj.hashCode()){
+            obj.counter++;
+            return true;
+        } else{
+            return false;
+        }
+    }
+    public boolean equals(Object obj){
+        if(obj.getClass() == this.getClass()){
+            return equals(((HashStatistic) obj));
+        } else{
+            return false;
+        }
+
+    }
+    char getcode1(){
+        return code1;
+    }
+    String getcode2(){
+        return code2;
+    }
+    int getCounter(){
+        return counter;
+    }
+    static private int  pow(int number,int  st){
+        int y =1;
+        for(int i = 0;i<st;i++){
+            y = y*number;
+        }
+        return y;
+    }
+}
