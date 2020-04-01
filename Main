@@ -1,0 +1,73 @@
+package com.company;
+import Iterfacefile.DoText;
+import Iterfacefile.Chartocode;
+import Parser.Parsercomand;
+import Iterfacefile.Codetochar;
+import java.io.IOException;
+import java.util.*;
+
+
+public class Main {
+
+    static final char[] english = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+            'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
+            'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
+            ',', '.', '?' };
+
+    static final String[] morse = { ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..",
+            ".---", "-.-", ".-..", "--", "-.", "---", ".---.", "--.-", ".-.",
+            "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--..", ".----",
+            "..---", "...--", "....-", ".....", "-....", "--...", "---..", "----.",
+            "-----", "--..--", ".-.-.-", "..--.." };
+    ///////////////////ПЕРЕВОД ИЗ АЗБУКИ МОРЗЕ В БУКВЫ//////////////////////////////////////////
+
+    public static String Morsetoword(String s )
+    {
+
+        String[] letters = s.split(" ");
+        String str = "";
+        for (int i = 0; i < letters.length; i++)
+        {
+            for (int j = 0; j < morse.length; j++)
+            {
+                if (morse[j].equals(letters[i]))
+                {
+                    str = str + english[j];
+                    break;
+                }
+            }
+        }
+        return str;
+    }
+    ////////////////////ПЕРЕВОД ИЗ БУКВ В АЗБУКУ МОРЗЕ////////////////////////////////////////
+    public static String stringToMorse( String s )
+    {
+        s = s.toLowerCase();
+        char[] chars = s.toCharArray();
+        String str = "";
+        for (int i = 0; i < chars.length; i++){
+            for (int j = 0; j < english.length; j++){
+                if (english[j] == chars[i]){
+                    str = str + morse[j] + " ";
+                    break;
+                }
+            }
+        }
+        return str;
+    }
+    public static void main(String[] args) throws IOException {
+
+        Parsercomand.Parse();
+        HashMap<String, DoText> Sootv = new HashMap<String, DoText>();
+        Codetochar decode = new Codetochar();
+        Chartocode code = new Chartocode();
+        Scanner input = new Scanner(System.in);
+//        System.out.println("What do you want to do?");
+//                System.out.println("\ncode or decode");
+
+       Sootv.put("decode",decode);
+        Sootv.put("code",code);
+        Sootv.get(Parsercomand.get_command()).control(Parsercomand.get_file_name());
+
+    }
+}
