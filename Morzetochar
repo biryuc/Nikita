@@ -1,0 +1,63 @@
+package Iterfacefile;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.Properties;
+import java.util.Scanner;
+
+final public class Codetochar implements DoText {///команда 1
+    public void control(String file_name1) throws IOException {
+
+        File write_file = new File("result.txt");
+        if (write_file.exists()) {
+
+            write_file.delete();
+        }
+        write_file.createNewFile();
+        PrintWriter writer = new PrintWriter(write_file);
+        Scanner input = new Scanner(new File(file_name1));
+        StringBuilder str = new StringBuilder("");//Это строка с которой будут поступать и шифроваться символы
+        StringBuilder str_for_write = new StringBuilder(); //В этой строке будет храниться строка которая полностью пойдёт в файл
+        FileInputStream in = new FileInputStream("Char-Morze.txt");//Для пропертис
+        Properties properties = new Properties();
+        properties.load(in);
+        StringBuilder my_key_string = new StringBuilder("");
+        HashSet<HashStatistic> HS = new HashSet<HashStatistic>();
+        while(input.hasNextLine()){
+            str.replace(0,str.length(), input.nextLine());
+            str_for_write.delete(0,str_for_write.length());
+            my_key_string.delete(0,my_key_string.length());
+            for(int i=0;i<str.length();i++){
+                my_key_string.append(str.charAt(i));
+                if(str.charAt(i)==')'){
+                    str_for_write.append(properties.get(my_key_string.toString()));
+                    HS.add(new HashStatistic(my_key_string.toString()));
+
+                    my_key_string.delete(0,my_key_string.length());
+
+                }
+                else if(str.charAt(i)==' '){
+                    str_for_write.append(my_key_string);
+                    HS.add(new HashStatistic(' '));
+
+                    my_key_string.delete(0,my_key_string.length());
+
+                }
+            }
+
+            writer.println(str_for_write);
+        }
+
+        int index_of_arr = 0;
+        for(HashStatistic tmp:HS){
+            index_of_arr++;
+            System.out.println(index_of_arr + ") " + tmp.getcode2() + "=" + properties.getProperty(tmp.getcode2()) +"---- " + tmp.getCounter());
+        }
+
+        in.close();
+        writer.close();
+    }
+}
